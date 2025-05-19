@@ -24,5 +24,5 @@ complex<double> Inductor::setFreq_calcImpedance(const double freq_in_Hz)
 
 void const Inductor::printData()
 {
-  std::cout<<"Inductor:    inductance = "<<inductance<<" Henry | impedance = "<<impedance<<" Ohms"<<std::endl; 
+  std::cout<<"Inductor:    inductance = "<<inductance<<" Henry | impedance = "<<real(impedance)<<" + "<<imag(impedance)<<"i (Ohms)"<<std::endl; 
 };

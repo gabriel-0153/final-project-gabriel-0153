@@ -24,5 +24,5 @@ complex<double> Resistor::setFreq_calcImpedance(const double freq_in_Hz)
 
 void const Resistor::printData()
 {
-  std::cout<<"Resistor:    resistance = "<<resistance<<" Ohms | impedance = "<<impedance<<" Ohms"<<std::endl; 
+  std::cout<<"Resistor:    resistance = "<<resistance<<" Ohms | impedance = "<<real(impedance)<<" + "<<imag(impedance)<<"i (Ohms)"<<std::endl;
 };

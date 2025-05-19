@@ -8,9 +8,6 @@
 // Circuit is derived from "Component.h"
 
 #include"Component.h"
-#include"Resistor.h"
-#include"Capacitor.h"
-#include"Inductor.h"
 #include"Circuit.h"
 #include<iostream>
 #include<memory>
@@ -22,29 +19,17 @@ using std::complex;
 // Name/description setters
 void Circuit::setName(const std::string name_in)
 {
-  if(name_in.size() > 10) throw std::out_of_range("character limit (10) exceeded"); // try-catch logic used to reprompt end user
+  if(name_in.size() > 15) throw std::out_of_range("character limit (10) exceeded"); // try-catch logic used to reprompt end user
   name = name_in;
 };
 
 void Circuit::setDescription(const std::string desc_in)
 {
-  if(desc_in.size() > 20) throw std::out_of_range("character limit (20) exceeded"); // try-catch logic used to reprompt end user
+  if(desc_in.size() > 40) throw std::out_of_range("character limit (40) exceeded"); // try-catch logic used to reprompt end user
   description = desc_in;
 };
 
-// Setter for components
-// first setter is a template that takes a basic leaf class and constructs it within a shared_ptr 
-// function signature is (double), as all 3 leaves (Resistor/Capacitor/Inductor) take 1 double as constructor argument
-template <class c_type> void Circuit::emplaceComponent(const double comp_parameter)
-{
-  if (!(typeid(c_type) == typeid(Resistor) || typeid(c_type) == typeid(Capacitor) || typeid(c_type) == typeid(Inductor)))
-  // virtual base means typeid will look to derived class typename
-  {
-    throw std::invalid_argument("must construct a leaf class (Resistor/Capacitor/Inductor) derived from Component");
-  } // custom exception supercedes an exception if c_type lacks a constructor of this signature, or unintended behaviour if it does
-  components.push_back(std::make_shared<c_type>(comp_parameter));
-};
-
+// Setter for components - first is a template fully implemented in the header
 // second setter overloads emplaceComponent to take a shared_ptr and directly add it to the components vector, bumping ref_count
 // function signature is (shared_ptr<Component>) so no ambiguity
 void Circuit::emplaceComponent(const std::shared_ptr<Component> comp_in) // const is ok:-ref_count bump is during copy construction (before function block)
@@ -79,13 +64,13 @@ void const Circuit::printData()
   }
   // print circuit header information
   std::cout<<"Name: "<<name<<" | "<<description<<"\n"
-           <<isSeries_or_Parallel()<<" circuit | AC Frequency = "<<frequency/(2*pi)<<" Hz |/n"
-           <<"Calculated Impedance:  Magnitude = "<<abs(impedance)<<" Ohms | Phase = "<<arg(impedance)<<" rad/n"
+           <<isSeries_or_Parallel()<<" circuit | AC Frequency = "<<frequency/(2*pi)<<" Hz\n"
+           <<"Calculated Impedance:  Magnitude = "<<abs(impedance)<<" Ohms | Phase = "<<arg(impedance)<<" rad\n"
            <<"This circuit contains "<<components.size()<<" components:"<<std::endl;
   // then call printData() on each component
     for(size_t i{0}; i<components.size(); i++)
   {
-    std::cout<<"Component "<<i<<"./n"<<"----------------------------------------"<<std::endl;
+    std::cout<<"Component "<<i+1<<".\n"<<"----------------------------------------"<<std::endl;
     components[i]->printData();
     std::cout<<"----------------------------------------"<<std::endl;
   }

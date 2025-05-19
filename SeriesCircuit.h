@@ -20,7 +20,7 @@ class SeriesCircuit : public Circuit
   public:
     // Constructor/Destructor
     SeriesCircuit() = default;  // no member data to initialise,
-    ~SeriesCircuit();           // or release
+    ~SeriesCircuit() = default; // or release
 
     // Overriddes
     std::string isSeries_or_Parallel() {return "Series";};

@@ -22,6 +22,9 @@ main() // test
   myCircuit->emplaceComponent<Capacitor>(57.0);
   myCircuit->emplaceComponent<Inductor>(57.0);
   myCircuit->emplaceComponent<Resistor>(103.0);
+  myCircuit->setName("Jorge");
+  myCircuit->setDescription("2 resistors, 1 inductor, 1 capacitor");
   myCircuit->setFreq_calcImpedance(60);
+  std::cout.precision(3);
   myCircuit->printData();
 };
