@@ -9,7 +9,9 @@
 
 #include"Component.h"
 #include"Circuit.h"
+#include"TUI.h"
 #include<iostream>
+#include<sstream>
 #include<memory>
 #include<complex>
 #include<vector>
@@ -44,8 +46,8 @@ complex<double> Circuit::setFreq_calcImpedance(const double freq_in_Hz)
 {
   frequency = 2*pi*freq_in_Hz;
   if(components.empty()) return {0.0, 0.0}; // empty vector escape (otherwise division by 0 errors)
-  // set total variable to first impedance explicitly - (trying) to avoid other possible empty vector edge cases
-  complex<double> z_total = components[0]->setFreq_calcImpedance(freq_in_Hz); // recursive call sub-objects()
+  // set total variable to first impedance explicitly - (trying) to avoid other possible empty vector edge-cases
+  complex<double> z_total = components[0]->setFreq_calcImpedance(freq_in_Hz); // recursive call on sub-object
   for(size_t i{1}; i<components.size(); i++)
   {
     z_total = combineImpedance(z_total, components[i]->setFreq_calcImpedance(freq_in_Hz)); // overridden by derived classes to implement series/parallel behaviour
@@ -59,19 +61,22 @@ void const Circuit::printData()
 {
   if(components.empty()) // not strictly necessary - setFreq_calcImpedance() should be called first and will catch this issue
   {
-    std::cout<<"Trying to display null circuit - something went wrong!"<<std::endl;
+    TUI::centredPrint("Trying to print empty circuit - something went wrong!");
     return;
   }
+
   // print circuit header information
-  std::cout<<"Name: "<<name<<" | "<<description<<"\n"
-           <<isSeries_or_Parallel()<<" circuit | AC Frequency = "<<frequency/(2*pi)<<" Hz\n"
-           <<"Calculated Impedance:  Magnitude = "<<abs(impedance)<<" Ohms | Phase = "<<arg(impedance)<<" rad\n"
-           <<"This circuit contains "<<components.size()<<" components:"<<std::endl;
+  std::ostringstream os;
+  os<<"Name: "<<name<<" | "<<description<<"\n"
+    <<isSeries_or_Parallel()<<" circuit | AC Frequency = "<<frequency/(2*pi)<<" Hz\n"
+    <<"Calculated Impedance:  Magnitude = "<<abs(impedance)<<" Ohms | Phase = "<<arg(impedance)<<" rad\n"
+    <<"This circuit contains "<<components.size()<<" components:";
+  TUI::centredPrint(os.str());
   // then call printData() on each component
     for(size_t i{0}; i<components.size(); i++)
   {
-    std::cout<<"Component "<<i+1<<".\n"<<"----------------------------------------"<<std::endl;
+    TUI::printFullRow("-+");
     components[i]->printData();
-    std::cout<<"----------------------------------------"<<std::endl;
   }
+  TUI::printFullRow("-+");
 };

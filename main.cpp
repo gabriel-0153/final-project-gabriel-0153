@@ -5,6 +5,8 @@
 #include<complex>
 #include<iostream>
 #include<memory>
+#include<iomanip>
+#include"TUI.h"
 #include"Component.h"
 #include"Resistor.h"
 #include"Capacitor.h"
@@ -13,18 +15,38 @@
 #include"SeriesCircuit.h"
 #include"ParallelCircuit.h"
 
+#include <chrono>
+#include <thread>
+
 using std::complex;
 
-main() // test
+main() // testing
 {
-  std::shared_ptr<Circuit> myCircuit = std::make_shared<ParallelCircuit>();
-  myCircuit->emplaceComponent<Resistor>(57.0);
-  myCircuit->emplaceComponent<Capacitor>(57.0);
-  myCircuit->emplaceComponent<Inductor>(57.0);
-  myCircuit->emplaceComponent<Resistor>(103.0);
-  myCircuit->setName("Jorge");
-  myCircuit->setDescription("2 resistors, 1 inductor, 1 capacitor");
-  myCircuit->setFreq_calcImpedance(60);
-  std::cout.precision(3);
-  myCircuit->printData();
-};
+  TUI::screenWidth.set(150); TUI::screenHeight.set(40);
+
+  std::shared_ptr<Circuit> Circuit1 = std::make_shared<ParallelCircuit>();
+  std::shared_ptr<Circuit> Circuit2 = std::make_shared<SeriesCircuit>();
+
+  Circuit2->emplaceComponent<Capacitor>(301);
+  Circuit2->emplaceComponent<Capacitor>(0.002);
+
+  Circuit1->emplaceComponent(Circuit2);
+  Circuit1->emplaceComponent<Capacitor>(201.0);
+  Circuit1->emplaceComponent<Capacitor>(33.0);
+  Circuit1->emplaceComponent<Capacitor>(1.77);
+  Circuit1->emplaceComponent<Capacitor>(103.0);
+  Circuit1->setName("Jorge");
+  Circuit1->setDescription("1 series, 4 capacitors");
+
+
+  Circuit1->setFreq_calcImpedance(60);
+
+  TUI::clear();
+  Circuit1->printData();
+  std::this_thread::sleep_for(std::chrono::seconds(20));
+  TUI::clear();
+
+
+
+  // std::cout.precision(3);
+  };    
