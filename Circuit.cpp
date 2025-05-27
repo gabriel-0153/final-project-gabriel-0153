@@ -61,22 +61,21 @@ void const Circuit::printData()
 {
   if(components.empty()) // not strictly necessary - setFreq_calcImpedance() should be called first and will catch this issue
   {
-    TUI::centredPrint("Trying to print empty circuit - something went wrong!");
+    TUI::CentredPrint<<"Trying to print empty circuit - something went wrong!"<<std::endl;
     return;
   }
 
   // print circuit header information
-  std::ostringstream os;
-  os<<"Name: "<<name<<" | "<<description<<"\n"
+  TUI::CentredPrint<<"Name: "<<name<<" | "<<description<<"\n"
     <<isSeries_or_Parallel()<<" circuit | AC Frequency = "<<frequency/(2*pi)<<" Hz\n"
-    <<"Calculated Impedance:  Magnitude = "<<abs(impedance)<<" Ohms | Phase = "<<arg(impedance)<<" rad\n"
-    <<"This circuit contains "<<components.size()<<" components:";
-  TUI::centredPrint(os.str());
+    <<"Calculated Impedance:  Magnitude = "<<abs(impedance)<<" Ohms | Phase = "<<arg(impedance)<<" rad\n";
+  TUI::LeftPrint<<"This circuit contains "<<components.size()<<" components:"<<std::endl;
+
   // then call printData() on each component
-    for(size_t i{0}; i<components.size(); i++)
+    for(size_t i{0}; i<components.size(); ++i)
   {
-    TUI::printFullRow("-+");
-    components[i]->printData();
+    string componentTitle = "Component number " + std::to_string(i) + " |";
+    TUI::printFullRow("+-", componentTitle);
+    components[i]->printData(); // can you get the level of recursion on circuit printData() so i can change alignment of subcircuits?
   }
-  TUI::printFullRow("-+");
 };

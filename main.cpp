@@ -43,10 +43,7 @@ main() // testing
 
   TUI::clear();
   Circuit1->printData();
-  std::this_thread::sleep_for(std::chrono::seconds(20));
-  TUI::clear();
-
-
-
-  // std::cout.precision(3);
-  };    
+  TUI::printFullRow("|_|");
+  // std::this_thread::sleep_for(std::chrono::seconds(20));
+  // TUI::clear();
+};    

@@ -26,7 +26,5 @@ complex<double> Capacitor::setFreq_calcImpedance(const double freq_in_Hz)
 
 void const Capacitor::printData()
 {
-  std::ostringstream os;
-  os<<"Capacitor:    capacitance = "<<capacitance<<" Coulombs/Volt | impedance = "<<real(impedance)<<" + "<<imag(impedance)<<"i (Ohms)";
-  TUI::centredPrint(os.str());
+  TUI::CentredPrint<<"Capacitor:    capacitance = "<<capacitance<<" Coulombs/Volt | impedance = "<<real(impedance)<<" + "<<imag(impedance)<<"i (Ohms)"<<std::endl;
 };
